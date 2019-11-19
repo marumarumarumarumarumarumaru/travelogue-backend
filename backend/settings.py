@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'travelogue',
     'rest_framework',
     'corsheaders',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [

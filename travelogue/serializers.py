@@ -7,7 +7,8 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('username', 'locations_visited')
+        depth = 1
+        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'password', 'locations_visited')
 
 
 class UserSerializerWithToken(serializers.ModelSerializer):
@@ -34,19 +35,25 @@ class UserSerializerWithToken(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('token', 'username', 'first_name', 'last_name', 'email', 'password')
+        fields = ('token', 'id', 'username', 'first_name', 'last_name', 'email', 'password')
 
 class LocationSerializer(serializers.ModelSerializer):
+    users_visited = serializers.PrimaryKeyRelatedField(many=True, read_only=False, queryset=User.objects.all())
+
     class Meta:
         model = Location
-        fields = ['name', 'latitude', 'longitude', 'pic_url']
+        fields = ['name', 'latitude', 'longitude', 'pic_url', 'users_visited']
 
 class ReviewSerializer(serializers.ModelSerializer):
+    locations = LocationSerializer(many=True)
+
     class Meta:
         model = Review
         fields = ['title', 'text', 'posted_at', 'user', 'location']
 
 class CommentSerializer(serializers.ModelSerializer):
+    reviews = ReviewSerializer(many=True)
+
     class Meta:
         model = Comment
         fields = ['text', 'posted_at', 'user', 'review']

@@ -8,6 +8,7 @@ from .models import Location, Review, Comment
 from .serializers import UserSerializer, UserSerializerWithToken, LocationSerializer, ReviewSerializer, CommentSerializer
 
 
+
 @api_view(['GET'])
 def current_user(request):
     """
@@ -20,8 +21,7 @@ def current_user(request):
 
 class UserList(APIView):
     """
-    Create a new user. It's called 'UserList' because normally we'd have a get
-    method here too, for retrieving a list of all User objects.
+    Create a new user.
     """
 
     permission_classes = (permissions.AllowAny,)
@@ -34,6 +34,7 @@ class UserList(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class LocationViewSet(viewsets.ModelViewSet):
+    permission_classes = (permissions.AllowAny,)
     queryset = Location.objects.all()
     serializer_class = LocationSerializer
 
